@@ -22,16 +22,14 @@ dat <- dat[-missing_indexs,]
  dat[,28]=factor(dat[,28],ordered=TRUE)
 
 dim(dat)
-set.seed(1234567)
-indexs=sample((1:dim(dat)[1]),size=75)
-dat=dat[indexs,]
+
+
 NAMES=c("Geschlecht","Alter","Bildung","Vertrauen Bundestag","Einkommen", "Einordnungsberuf","Subjektive Schichteinstufung","Rollenbild","immigrant")#,"Politisches Interesse","Gewichtung",")
 Z <- dat[,c((1:9))]#,(22:22))]#[-c(5)]
 colnames(Z) <- NAMES[(1:9)]#[-c(5)]
-CT <- oofos:::get_auto_conceptual_scalin(Z)
-
-
-
-
-
-Z=remove.full.cols(X)
+CT <- oofos:::get_auto_conceptual_scaling(Z)
+CT <- t(unique(t(CT)))
+set.seed(1234567)
+indexs1=sample((1:dim(dat)[1]),size=212)
+CT1 <- CT[indexs,]
+write.csv2(CT1,"CT1.csv",quote=FALSE)
