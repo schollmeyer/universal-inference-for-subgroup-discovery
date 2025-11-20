@@ -35,3 +35,4 @@ CT1 <- CT[indexs,]
 write.csv2(CT1,"CT1.csv",quote=FALSE)
 
 Lattice=oofos:::compute_concept_lattice(t(CT1))
+Lattice <- list(extents=Lattice$intents,intents=Lattice$extents)
