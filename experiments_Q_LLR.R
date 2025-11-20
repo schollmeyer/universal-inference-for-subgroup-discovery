@@ -16,8 +16,13 @@ y[which(E2==1)] <- y2[which(E2==1)]
 y[which(E3==1)] <- y3[which(E3==1)]
 y[which(E4==1)] <- y4[which(E4==1)]
 
-obj <- oofos::compute_objective(data.frame(y=y),"y","1")
+obj <- oofos::compute_objective(data.frame(y=y),"y","0")
 table(obj)
+
 
 model <- oofos::optimize_on_context_extents(CT1,objective=obj)
 res1 <- gurobi::gurobi(model)
+oofos:::quality(model,res1)
+
+LLR <- oofos:::Q_LLR_lattice(Lattice,obj)
+
