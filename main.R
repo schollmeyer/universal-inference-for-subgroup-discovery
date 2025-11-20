@@ -30,6 +30,8 @@ colnames(Z) <- NAMES[(1:9)]#[-c(5)]
 CT <- oofos:::get_auto_conceptual_scaling(Z)
 CT <- t(unique(t(CT)))
 set.seed(1234567)
-indexs=sample((1:dim(dat)[1]),size=75)
+indexs=sample((1:dim(dat)[1]),size=50)
 CT1 <- CT[indexs,]
 write.csv2(CT1,"CT1.csv",quote=FALSE)
+
+Lattice=oofos:::compute_concept_lattice(t(CT1))
