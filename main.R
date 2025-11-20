@@ -1,9 +1,9 @@
-a= <- ead.spss("ZA5270_v2-0-0.sav")
+setwd("C:/Paper_fallibilistic_regularization/Allbus2018")
+library(foreign)
+a  <- read.spss("ZA5270_v2-0-0.sav")
 dat <- data.frame(a$sex,a$age,a$iscd11, a$J007_1,  a$incc, a$dw01, a$id02, a$J006,   a$dm02c,a$pa02,a$pk01,a$pk02,a$pk03,a$pk04,a$pk05,a$pk06,a$pk07,a$pk08,a$pk09, a$pv01,a$wghtpew,a$pe02,a$sm04,a$sm05,a$sm06,a$sm07,a$dn01,a$id05)
-
 missing:indexs <-which( dat[,2]=="NICHT GENERIERBAR" | dat[,3]=="NICHT GENERIERBAR" | dat[,4] %in% c("KEIN ISSP", "KEIN ISSP RELIGION","KEINE ANGABE", "KANN NICHT SAGEN") | dat[,5]=="NICHT GENERIERBAR"|dat[,6] %in% c("DATENFEHLER","KEINE ANGABE")|dat[,7]%in%c("KEINER DER SCHICHTEN","KEINE ANGABE","WEISS NICHT","VERWEIGERT")|dat[,8]%in%c("KEIN ISSP","KEIN ISSP RELIGION","KEINE ANGABE","KANN NICHT SAGEN") |dat[,10]=="KEINE ANGABE"|dat[,20]=="NEUE BUNDESLAENDER"|dat[,9]=="KEINE ANGABE"|dat[,21]=="NEUE BUNDESLAENDER" | dat[,22]=="KEINE ANGABE" | dat[,22]=="WEISS NICHT" | dat[,23]=="KEINE ANGABE"| dat[,24]=="KEINE ANGABE"| dat[,25]=="KEINE ANGABE"| dat[,26]=="KEINE ANGABE" | dat[,28]=="KEINE ANGABE" | dat[,28]=="WEISS NICHT")   
-        
- dat <- dat[-missing_indexs,] 
+dat <- dat[-missing_indexs,] 
  
  dat[,2]=factor(dat[,2],ordered=TRUE)
  dat[,3]=factor(dat[,3],ordered=TRUE)
@@ -18,8 +18,8 @@ missing:indexs <-which( dat[,2]=="NICHT GENERIERBAR" | dat[,3]=="NICHT GENERIERB
  dat[,24]=factor(dat[,24],ordered=FALSE)
  dat[,25]=factor(dat[,25],ordered=FALSE)
  dat[,26]=factor(dat[,26],ordered=FALSE)
-  dat[,27]=factor(dat[,27],ordered=FALSE)
-  dat[,28]=factor(dat[,28],ordered=TRUE)
+ dat[,27]=factor(dat[,27],ordered=FALSE)
+ dat[,28]=factor(dat[,28],ordered=TRUE)
 
 dim(dat)
 set.seed(1234567)
