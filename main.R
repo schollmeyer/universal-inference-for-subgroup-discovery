@@ -34,7 +34,6 @@ indexs <- sample((1:dim(dat)[1]),size=100)
 CT1 <- CT[indexs,]
 CT2 <- CT[-indexs,]
 indexs2 <- sample( seq_len(nrow(CT2)),size=100)
-
 CT3 <- CT2[indexs2,]
 
 write.csv2(CT1,"CT1.csv",quote=FALSE)
