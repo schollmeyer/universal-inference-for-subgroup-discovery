@@ -46,4 +46,15 @@ table(obj)
 
 LLR <- oofos:::Q_LLR_lattice(Lattice,obj)
 i <- which.max(LLR)
+###
+set.seed(1234567)
+indexs1 <- sample(seq_len(nrow(dat)),size=531)
+CT1 <- CT[indexs1,]
+CT2 <- CT[-indexs1,]
+extents1 <- list()
+extents2 <- list()
+for(k in seq_len(nrow(Lattice$intents))){
+ temp <- as.logical(oofos:::compute_phi(Lattice$intents[k,],CT1));extents1[[k]] <- temp
+ temp <- as.logical(oofos:::compute_phi(Lattice$intents[k,],CT2));extents2[[k]] <- temp
+ ;print(k)}
 
