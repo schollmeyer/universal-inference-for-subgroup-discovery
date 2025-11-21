@@ -30,9 +30,21 @@ colnames(Z) <- NAMES[(1:9)]#[-c(5)]
 CT <- oofos:::get_auto_conceptual_scaling(Z)
 CT <- t(unique(t(CT)))
 set.seed(1234567)
-indexs=sample((1:dim(dat)[1]),size=100)
+indexs <- sample((1:dim(dat)[1]),size=100)
 CT1 <- CT[indexs,]
+CT2 <- CT[-indexs,]
+indexs2 <- sample( seq_len(nrow(CT2)),size=100)
+
+CT3 <- CT2[indexs2,]
+
 write.csv2(CT1,"CT1.csv",quote=FALSE)
 
-Lattice=oofos:::compute_concept_lattice(t(CT1))
-Lattice <- list(extents=Lattice$intents,intents=Lattice$extents)
+#Lattice=oofos:::compute_concept_lattice(t(CT1))
+#Lattice <- list(extents=Lattice$intents,intents=Lattice$extents)
+obj <- oofos::compute_objective(data.frame(y=dat[indexs,10] %in% c("STARK","SEHR STARK")),"y","TRUE")
+table(obj)
+
+
+LLR <- oofos:::Q_LLR_lattice(Lattice,obj)
+i <- which.max(LLR)
+
