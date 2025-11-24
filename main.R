@@ -51,10 +51,15 @@ set.seed(1234567)
 indexs1 <- sample(seq_len(nrow(dat)),size=531)
 CT1 <- CT[indexs1,]
 CT2 <- CT[-indexs1,]
-extents1 <- list()
-extents2 <- list()
-for(k in seq_len(nrow(Lattice$intents))){
- temp <- as.logical(oofos:::compute_phi(Lattice$intents[k,],CT1));extents1[[k]] <- temp
- temp <- as.logical(oofos:::compute_phi(Lattice$intents[k,],CT2));extents2[[k]] <- temp
+
+set.seed(1234567)
+indexs_small_lattice <- c(1,sample(seq_len(nrow(Lattice$extents)),size=100000),nrow(Lattice$extents))
+small_lattice <- list(extents=Lattice$extents[indexs_small_lattice,],intents=Lattice$intents[indexs_small_lattice,])
+
+extents1 <- array(as.logical(0),c(100002,531))
+extents2 <- array(as.logical(0),c(100002,532))
+for(k in seq_len(nrow(small_lattice$intents))){
+ temp <- as.logical(oofos:::compute_phi(small_lattice$intents[k,],CT1));extents1[k,] <- temp
+ temp <- as.logical(oofos:::compute_phi(small_lattice$intents[k,],CT2));extents2[k,] <- temp
  ;print(k)}
 
