@@ -25,8 +25,8 @@ dim(dat)
 
 
 NAMES=c("Geschlecht","Alter","Bildung","Vertrauen Bundestag","Einkommen", "Einordnungsberuf","Subjektive Schichteinstufung","Rollenbild","immigrant")#,"Politisches Interesse","Gewichtung",")
-Z <- dat[,c((1:9))]#,(22:22))]#[-c(5)]
-colnames(Z) <- NAMES[(1:9)]#[-c(5)]
+Z <- dat[,c(1,2)]#c((1:9))]#,(22:22))]#[-c(5)]
+colnames(Z) <- NAMES[c(1,2)]#(1:9)]#[-c(5)]
 CT <- oofos:::get_auto_conceptual_scaling(Z)
 CT <- t(unique(t(CT)))
 set.seed(1234567)
@@ -52,14 +52,46 @@ indexs1 <- sample(seq_len(nrow(dat)),size=531)
 CT1 <- CT[indexs1,]
 CT2 <- CT[-indexs1,]
 
+obj1 <- oofos::compute_objective(data.frame(y=dat[indexs1,10] %in% c("STARK","SEHR STARK")),"y","TRUE")
+table(obj1)
+
+obj2 <- oofos::compute_objective(data.frame(y=dat[-indexs1,10] %in% c("STARK","SEHR STARK")),"y","TRUE")
+table(obj2)
+
+####
+
+model1 <- oofos::optimize_on_context_extents(CT1,obj=obj1)
+model2 <- oofos::optimize_on_context_extents(CT2,obj=obj2)
+res1 <- gurobi(model1)
+res2 <- gurobi(model2)
+
+I2 <- res2$x[-(1:532)]
+E2 <- oofos:::compute_phi(I2,CT1)
+res2$objval
+sum(E2*obj1)
+
 set.seed(1234567)
 indexs_small_lattice <- c(1,sample(seq_len(nrow(Lattice$extents)),size=100000),nrow(Lattice$extents))
 small_lattice <- list(extents=Lattice$extents[indexs_small_lattice,],intents=Lattice$intents[indexs_small_lattice,])
 
-extents1 <- array(as.logical(0),c(100002,531))
-extents2 <- array(as.logical(0),c(100002,532))
+
+small_lattice=L
+
+extents1 <- array(as.logical(0),c(nrow(small_lattice$extents),531))
+extents2 <- array(as.logical(0),c(nrow(small_lattice$extents),532))
 for(k in seq_len(nrow(small_lattice$intents))){
  temp <- as.logical(oofos:::compute_phi(small_lattice$intents[k,],CT1));extents1[k,] <- temp
  temp <- as.logical(oofos:::compute_phi(small_lattice$intents[k,],CT2));extents2[k,] <- temp
  ;print(k)}
+
+
+LLR1 <- Q_LLR_lattice(list(extents=extents1),obj1)
+LLR2 <- Q_LLR_lattice(list(extents=extents2),obj2)
+
+alpha <- 0.1
+i <- which.max(LLR2)
+L_max <- LLR2[i]
+L_0_max <- LLR1[i]
+
+j <- which(LLR1 >= L_0_max)
 
